@@ -2,6 +2,7 @@ package dto
 
 import (
 	"encoding/json"
+	"promethues_alertmanager_webhook/config"
 	"time"
 )
 
@@ -54,8 +55,8 @@ func (c *Alert) UnmarshalJSON(data []byte) error {
 	c.Annotations = temp.Annotations
 	c.StartsAt = temp.StartsAt
 	c.EndsAt = temp.EndsAt
-	c.StartTime = c.StartsAt.Format("2006-01-02 15:04:05")
-	c.EndTime = c.EndsAt.Format("2006-01-02 15:04:05")
+	c.StartTime = c.StartsAt.In(config.Loc).Format("2006-01-02 15:04:05")
+	c.EndTime = c.EndsAt.In(config.Loc).Format("2006-01-02 15:04:05")
 	c.Count = temp.Count
 	c.Fingerprint = temp.Fingerprint
 	return nil

@@ -4,10 +4,12 @@ import (
 	"gopkg.in/yaml.v3"
 	"os"
 	"text/template"
+	"time"
 )
 
 type Server struct {
-	Port int `yaml:"port"`
+	Port     int    `yaml:"port"`
+	Location string `yaml:"location"`
 }
 
 var DingTalkTpl *template.Template
@@ -18,6 +20,7 @@ type Config struct {
 }
 
 var AppConf Config
+var Loc *time.Location
 
 type Chat struct {
 	DingTalk DingTalk `yaml:"dingTalk"`
@@ -40,5 +43,16 @@ func BootStrapInit() error {
 		return err
 	}
 	DingTalkTpl, err = template.New("dingTalk").Parse(AppConf.Chat.DingTalk.Template)
+	location := AppConf.Server.Location
+	if location == "" {
+		location = os.Getenv("TZ")
+	}
+	if location == "" {
+		location = "Asia/Shanghai"
+	}
+	Loc, err = time.LoadLocation(location)
+	if err != nil {
+		return err // 或处理错误
+	}
 	return nil
 }

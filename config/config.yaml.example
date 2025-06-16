@@ -1,5 +1,7 @@
 server:
   port: 8050
+  # 时区. 如果不设置, 将取值系统环境TZ, 如果系统环境TZ不存在, 则使用Asia/Shanghai
+  location: Asia/Shanghai
 
 chat:
   dingTalk:
